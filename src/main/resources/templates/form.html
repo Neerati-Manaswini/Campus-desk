@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">Student</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<header><a th:href="@{/students}">Student Management</a></header>
+<main>
+    <div class="card">
+        <h2 th:text="${title}"></h2>
+        <form method="post" th:action="@{/students}" th:object="${student}">
+            <input type="hidden" th:field="*{id}">
+
+            <label for="name">Name</label>
+            <input id="name" type="text" th:field="*{name}">
+            <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+
+            <label for="email">Email</label>
+            <input id="email" type="text" th:field="*{email}">
+            <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+            <label for="course">Course</label>
+            <input id="course" type="text" th:field="*{course}">
+            <div class="error" th:if="${#fields.hasErrors('course')}" th:errors="*{course}"></div>
+
+            <label for="year">Year</label>
+            <select id="year" th:field="*{year}">
+                <option th:each="y : ${#numbers.sequence(1, 4)}" th:value="${y}" th:text="${y}"></option>
+            </select>
+            <div class="error" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
+
+            <p style="margin-top:1.25rem; display:flex; gap:.5rem">
+                <button class="btn" type="submit">Save student</button>
+                <a class="btn ghost" th:href="@{/students}">Cancel</a>
+            </p>
+        </form>
+    </div>
+</main>
+</body>
+</html>

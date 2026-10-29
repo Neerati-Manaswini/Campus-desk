@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Students</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<header><a th:href="@{/students}">Student Management</a></header>
+<main>
+    <div class="flash" th:if="${message}" th:text="${message}"></div>
+
+    <div class="toolbar">
+        <form method="get" th:action="@{/students}">
+            <input type="search" name="q" th:value="${q}" placeholder="Search by name or course">
+            <button class="btn ghost" type="submit">Search</button>
+        </form>
+        <a class="btn" th:href="@{/students/new}">Add student</a>
+    </div>
+
+    <div class="card">
+        <table th:if="${students.hasContent()}">
+            <thead>
+            <tr><th>Name</th><th>Email</th><th>Course</th><th>Year</th><th></th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="s : ${students}">
+                <td th:text="${s.name}"></td>
+                <td th:text="${s.email}"></td>
+                <td th:text="${s.course}"></td>
+                <td th:text="${s.year}"></td>
+                <td class="actions">
+                    <a class="btn ghost" th:href="@{/students/{id}/edit(id=${s.id})}">Edit</a>
+                    <form method="post" th:action="@{/students/{id}/delete(id=${s.id})}"
+                          onsubmit="return confirm('Delete this student?')">
+                        <button class="btn danger" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="empty" th:unless="${students.hasContent()}">No students found. Add one to get started.</p>
+
+        <div class="pager" th:if="${students.totalPages > 1}">
+            <a th:if="${students.hasPrevious()}" th:href="@{/students(page=${students.number - 1}, q=${q})}">Previous</a>
+            <span th:text="'Page ' + ${students.number + 1} + ' of ' + ${students.totalPages}"></span>
+            <a th:if="${students.hasNext()}" th:href="@{/students(page=${students.number + 1}, q=${q})}">Next</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>
